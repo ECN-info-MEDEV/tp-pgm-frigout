@@ -96,4 +96,24 @@ public class PGM {
         s.append("Nombre de lignes : " + this.contenu.size());
         return s.toString();
     }
+
+    /**
+     * Méthode pour créer un fichier PGM.
+     *
+     * @param destination La destination du fichier PGM.
+     * @author AFR
+     */
+    public void exportPGM(String destination){
+        try (PrintWriter out = new PrintWriter(destination)) {
+            out.println(this.entete);
+            out.println("#");
+            out.println(this.hauteur + "  " + this.hauteur);
+            out.println(this.maxGris);
+            for(String ligne : this.contenu){
+                out.println(ligne);
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Impossible de créer le fichier");
+        }
+    }
 }
