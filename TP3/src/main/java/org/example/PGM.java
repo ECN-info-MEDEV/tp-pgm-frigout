@@ -80,10 +80,10 @@ public class PGM {
         this.maxGris = Integer.parseInt(contenu.get(3));
 
         // Suppression des données plus utiles
-        contenu.remove(0);
-        contenu.remove(1);
-        contenu.remove(2);
-        contenu.remove(3);
+        contenu.remove(0); // Entête
+        contenu.remove(0); // Commentaire
+        contenu.remove(0); // Dimensions
+        contenu.remove(0); // Max niveau gris
         this.contenu = new ArrayList<>(contenu);
     }
 
@@ -115,5 +115,23 @@ public class PGM {
         } catch (FileNotFoundException e) {
             System.out.println("Impossible de créer le fichier");
         }
+    }
+
+    /**
+     * Méthode pour calculer l'histogramme d'une image.
+     *
+     * @return L'histogramme associé à l'image.
+     * @author AFR
+     */
+    public int[] calculeHisto(){
+        int[] histogramme = new int[256];
+
+        for(String ligne : this.contenu){
+            String[] valeur = ligne.split(" +");
+            for(int i = 0; i < valeur.length; i++){
+                histogramme[Integer.parseInt(valeur[i])]++;
+            }
+        }
+        return histogramme;
     }
 }
