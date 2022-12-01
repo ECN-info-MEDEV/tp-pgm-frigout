@@ -5,6 +5,8 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.StringJoiner;
+import java.util.StringTokenizer;
 
 /**
  * Classe représentant un fichier PGM.
@@ -133,5 +135,71 @@ public class PGM {
             }
         }
         return histogramme;
+    }
+
+    /**
+     * Méthode pour effectuer le seuillage d'une image.
+     * Attention le seuillage est effectué en place (modification directe des données).
+     *
+     * @param seuil Le seuil à considérer pour l'opération.
+     * @author AFR
+     */
+    public void seuillage(int seuil){
+        for(String ligne : this.contenu){
+            String[] valeurs = ligne.split(" +");
+
+            // Application du seuillage
+            for (int i = 0; i < valeurs.length; i++){
+                if(Integer.parseInt(valeurs[i]) < seuil){
+                    valeurs[i] = "0";
+                }else{
+                    valeurs[i] = "255";
+                }
+            }
+
+            // Création d'une ligne
+            StringJoiner s = new StringJoiner("  ");
+            for(int i = 0; i < valeurs.length; i++){
+                s.add(valeurs[i]);
+            }
+            this.contenu.set(this.contenu.indexOf(ligne), s.toString());
+        }
+
+        this.formaterNombreCaracteres();
+    }
+
+    /**
+     * Méthode pour formater le contenu. (70 caractères max par ligne).
+     *
+     * @author AFR
+     */
+    public void formaterNombreCaracteres(){
+        // Création d'une grande chaine de caractère contenant toutes les valeurs
+        StringJoiner s = new StringJoiner("  ");
+        for(String ligne : this.contenu){
+            s.add(ligne);
+        }
+
+        // Création du nouveau contenu
+        ArrayList<String> newContenu = new ArrayList<>();
+        StringTokenizer tok = new StringTokenizer(s.toString(), "  ");
+        StringBuilder tmpLigne = new StringBuilder();
+        int tailleLigne = 0;
+        while (tok.hasMoreTokens()) {
+            String mot = tok.nextToken();
+
+            if (tailleLigne + mot.length() > 70) {
+                newContenu.add(tmpLigne.toString().trim());
+                tmpLigne = new StringBuilder();
+                tailleLigne = 0;
+            }
+
+            tailleLigne += mot.length();
+            tailleLigne += 2;
+            tmpLigne.append(mot + "  ");
+        }
+
+        // Mise à jour du contenu
+        this.contenu = newContenu;
     }
 }
