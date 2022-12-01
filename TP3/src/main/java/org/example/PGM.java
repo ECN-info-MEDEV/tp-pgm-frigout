@@ -74,8 +74,8 @@ public class PGM {
 
         // Mise à jour du contenu
         this.entete = contenu.get(0);
-        this.hauteur = Integer.parseInt(contenu.get(2).split(" ")[0]);
-        this.largeur = Integer.parseInt(contenu.get(2).split(" ")[1]);
+        this.hauteur = Integer.parseInt(contenu.get(2).split("  ")[0]);
+        this.largeur = Integer.parseInt(contenu.get(2).split("  ")[1]);
 
         this.maxGris = Integer.parseInt(contenu.get(3));
 
@@ -85,5 +85,15 @@ public class PGM {
         contenu.remove(2);
         contenu.remove(3);
         this.contenu = new ArrayList<>(contenu);
+    }
+
+    @Override
+    public String toString(){
+        StringBuilder s = new StringBuilder();
+        s.append("Entête : " + this.entete + "\n");
+        s.append("Dimension : " + this.hauteur + ";" + this.largeur + "\n");
+        s.append("Niveau de gris maximum : " + this.maxGris + "\n");
+        s.append("Nombre de lignes : " + this.contenu.size());
+        return s.toString();
     }
 }
